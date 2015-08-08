@@ -1,0 +1,46 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div align = "right">
+         <a href="{{ url_for('detail')}}">Details</a>
+    </div>
+    <ul>
+        <h1>All restaurants name with <font color:blue>{{name}}</font> </h1>
+    </ul>
+     <div class = "row" >
+        <div class = "col-6" align = "right">
+            <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
+              <caption><strong><font size = 5 color = #2377d7>Violations<strong></caption>
+              <tr bgcolor="#346795">
+                <th><font color = "#FEFEFE">Name</th>
+                <th><font color = "#FEFEFE">ID</th>
+                <th><font color = "#FEFEFE">Address</th>
+                <th><font color = "#FEFEFE">Postal code</th>
+                <th><font color = "#FEFEFE">Telephone</th>
+                <th><font color = "#FEFEFE">Check details</th>
+              </tr>
+              {% for restaurant in data %}
+                <tr font-weight: bold>
+                    <td><font color = "#222277">{{restaurant.name}}</td>
+                    <td><font color = "#222277">{{restaurant.id}}</td>
+                    <td><font color = "#222277">{{restaurant.address}}</td>
+                    <td><font color = "#222277">{{restaurant.postal_code}}</td>
+                    <td><font color = "#222277">{{restaurant.phone_number}}</td>
+                    <td><a href="/inspections/{{restaurant.id}}">Check #{{restaurant.id}}</a></td>
+                </tr>  
+              {% endfor %}
+            </table>
+        </div>
+
+          <div class = "col-6" align = "left">
+           
+                {{SFmap.html}}
+                {{SFmap.js}}
+
+        </div>
+    </div>
+    {% endblock %}
+ 
+

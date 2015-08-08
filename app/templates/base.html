@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" media="screen">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+    <link   rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+
+    </head>
+    {% block head %}
+    {% endblock %}
+    <style>
+    #header {
+        background-color:#003355;
+        color:#eefff0;
+        text-align:center;
+        padding:10px;
+    }
+    </style>
+  <body>
+      <font  face = "open sans">
+      <div id="header" >  <font size="5">Website for health scores of restaurants in SF: 
+        <a href="{{ url_for('index')}}"></font><font size ='5' color = #ffeebb>Home </font> </a>
+    </div>
+    <div class = 'flash'>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}  
+                <ul>
+                {% for message in messages %}
+                    <li> <strong> <font color = red> {{ message }} </strong> </li>
+                {% endfor %}
+                </ul>
+                {% endif %}
+        {% endwith %}
+    </div>
+    {% block content %}{% endblock %}
+    </font>
+  </body>
+</html>

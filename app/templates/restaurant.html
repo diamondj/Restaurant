@@ -1,0 +1,68 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+    <div align = "right">
+         <a href="{{ url_for('detail')}}">Details</a>
+    </div>
+    <div class = "row" >
+        <div class = "col-6" align = "center">
+        <ul>
+            <h1>Restaurant page for #{{id}}:  {{data.name}} </h1>
+        </ul>
+
+        <ul>
+            <h5> Name: {{data.name}} </h5>
+            <h5> ID: {{data.id}} </h5>
+            <h5> Address: {{data.address}} </h5>
+            <h5> Postal code: {{data.postal_code}} </h5>
+            <h5> Telephone: {{data.phone_number}} </h5>
+            <h5> Recent score: {{inspection}} </h5>
+        </ul>
+        </div>
+        <div id="map-canvas" style = "width:500px;height:400px"></div>
+    </div>
+
+    <form action="" method = 'POST'>
+        Get detailed inspection and violation information:
+        <button name="subject" type="submit" value="inspections">Inspections</button>
+    </form>
+
+      <script>
+
+
+    function initialize() {
+      var myLatlng = new google.maps.LatLng({{data.latitude}},{{data.longitude}});
+      var mapOptions = {
+        zoom: 13,
+        center: myLatlng
+      };
+
+      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+      var contentString = '<div id="content">{{data.name}}</div>';
+
+
+      var infowindow = new google.maps.InfoWindow({content: contentString});
+
+      var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          title: 'Restaurant view'
+      });
+
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map,marker);
+      });
+
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+   
+
+{% endblock %}
+ 
+

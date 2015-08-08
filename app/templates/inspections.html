@@ -1,0 +1,53 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+
+{% block content %}
+  <div align = "right">
+         <a href="{{ url_for('detail')}}">Details</a>
+    </div>
+    <ul>
+        <h1>Information for inspections and violations of restaurant {{id}}: {{name}} </h1>
+    </ul>
+
+
+    <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
+      <caption><strong><font size = 5 color = #2377d7>Inspections<strong></caption>
+      <tr bgcolor="#346795">
+        <th><font color = "#FEFEFE">Date</th>
+        <th><font color = "#FEFEFE">Score</th>
+        <th><font color = "#FEFEFE">Inspection Type</th>
+      </tr>
+      {% for insp in inspections %}
+        <tr>
+
+            <td>{{insp.date.strftime("%m/%d/%Y")}}</td>
+            <td>{{insp.score}}</td>
+            <td>{{insp.insp_type}}</td>
+        </tr>  
+      {% endfor %}
+    </table>
+    <br><br><br>
+    <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
+      <caption><strong><font size = 5 color = #2377d7>Violations<strong><font></caption>
+      <tr bgcolor="#346795">
+        <th><font color = "#FEFEFE">Date</th>
+        <th><font color = "#FEFEFE"><font color = "#FEFEFE">Violation Code</th>
+        <th><font color = "#FEFEFE">Category</th>
+        <th><font color = "#FEFEFE">Description</th>
+
+      </tr>
+      {% for viol in violations %}
+        <tr>
+            <td>{{viol.date.strftime("%m/%d/%Y")}}</td>
+            <td>{{viol.typeID}}</td>
+            <td>{{viol.risk_category}}</td>
+            <td>{{viol.description}}</td>
+        </tr>  
+      {% endfor %}
+    </table>
+
+
+    {% endblock %}
+ 
+

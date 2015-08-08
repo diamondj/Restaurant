@@ -1,0 +1,52 @@
+
+body {
+    background-color: #fafdff;
+    font-style: Tahoma;
+}
+
+h1,h2,h3 {
+    color: #2355d7;
+    text-align: center;
+    font-family: "open sans"
+}
+
+table {
+  background-color: transparent;
+}
+caption {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color: #333333;
+  text-align: center;
+}
+th {
+  text-align: left;
+}
+
+#container {
+    display: block; 
+    position:relative
+} 
+.ui-autocomplete {
+    position: absolute;
+}
+
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+  display: flex;
+}
+
+.col-6 {
+  width: 50%;
+
+}
+
+
+.col-8 {
+  width: 66%;
+}
+
+.col-4 {
+  width: 33%;
+}

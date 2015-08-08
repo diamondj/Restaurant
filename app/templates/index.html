@@ -1,0 +1,64 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <div align = "right">
+         <a href="{{ url_for('detail')}}">Details</a>
+    </div>
+<div class = "row" >
+	<div align = "right" class = "col-6" >
+		<font size = 5 color = #1e5594 >
+		    <form action= "{{url_for('index')}}" method = 'POST'>
+			<p>Search results by restaurant ID:</p>
+			<input type = 'int' size='30' name = 'id'>
+			<input type='submit' name='Check', value = "Check by id">
+			</form>
+			<br><br>
+			<div id="container">
+				<form action= "{{url_for('index')}}" method = 'POST'>
+				<p>Search results by restaurant name:</p>
+				<input type = 'text' size='30' name = 'name' id = "rest_name">		
+				<input type='submit' name='Check', value = "Check by name">
+				</form>
+			</div>
+	</div>
+
+	<div align = "center" class = "col-6">
+	         {% with map=googlemap_obj("SFmap", 37.7833, -122.4167, style="height:400px;width:480px;margin:30px;") %}
+	            {{map.html}}
+	            {{map.js}}
+	        {% endwith %}
+	</div>
+</div>
+
+
+<div id="map-canvas"></div>
+</font>
+<script>
+$(function() {
+    $.ajax({
+        url: '{{ url_for("autocomplete") }}'
+        }).done(function (data) {
+            $('#rest_name').autocomplete({
+                source: function(request, response) {
+				        var results = $.ui.autocomplete.filter(data.json_list, request.term);
+				        response(results.slice(0, 8));
+				    }, 
+                minLength: 2,
+                appendTo: "#container"
+            });
+	            $.ui.autocomplete.filter = function (array, term) {
+				  var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
+				  return $.grep(array, function (value) {
+				    return matcher.test(value.label || value.value || value);
+				  });
+				};
+        });
+    });
+
+</script>
+
+
+{% endblock %}

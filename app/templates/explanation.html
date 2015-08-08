@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <ul>
+        <h1>Explanation for SF restaurant health score </h1>
+    </ul>
+
+
+    <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
+      <caption><strong><font size = 5 color = #2377d7>Inspections<strong></caption>
+      <tr bgcolor="#346795">
+        <th><font color = "#FEFEFE">Score</th>
+        <th><font color = "#FEFEFE">Operating Condition Category</th>
+        <th><font color = "#FEFEFE">Inspection Findings</th>
+      </tr>
+        <tr>
+            <td>>90</td>
+            <td>Good</td>
+            <td>Typically, only lower-risk health and safety violations observed<br>
+                May have high-risk violations
+            </td>
+        </tr>
+        <tr>
+            <td>86-90</td>
+            <td>Adequete</td>
+            <td>Several violations observed<br>
+                May have high-risk violations
+            </td>
+        </tr>
+        <tr>
+            <td>71-85</td>
+            <td>Needs Improvement</td>
+            <td>Multiple violations observed<br>
+                Typically, several high-risk violations
+            </td>
+        </tr>  
+        <tr>
+            <td><=70</td>
+            <td>Poor</td>
+            <td>Multiple violations observed<br>
+                Typically, several high-risk violations
+            </td>
+        </tr>      
+    </table>
+
+    <a href="https://www.sfdph.org/dph/EH/Food/Score/default.asp">For more details, please visit SF department of public health</a>
+
+    {% endblock %}
