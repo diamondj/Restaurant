@@ -16,27 +16,33 @@
 			<input type='submit' name='Check', value = "Check by id">
 			</form>
 			<br><br>
-			<div id="container">
+			<div>
 				<form action= "{{url_for('index')}}" method = 'POST'>
 				<p>Search results by restaurant name:</p>
 				<input type = 'text' size='30' name = 'name' id = "rest_name">		
 				<input type='submit' name='Check', value = "Check by name">
 				</form>
+				<div id = 'container'></div>
 			</div>
+			
 	</div>
 
-	<div align = "center" class = "col-6">
-	         {% with map=googlemap_obj("SFmap", 37.7833, -122.4167, style="height:400px;width:480px;margin:30px;") %}
-	            {{map.html}}
-	            {{map.js}}
-	        {% endwith %}
-	</div>
+	<div class = "col-6" id="map-canvas" align = "left" style = "margin:10px 5px 15px 20px;width:500px;height:380px"></div>
+	</font>
 </div>
 
-
-<div id="map-canvas"></div>
-</font>
 <script>
+    function initialize() {
+      var myLatlng = new google.maps.LatLng(37.7833,-122.4167);
+      var mapOptions = {
+        zoom: 14,
+        center: myLatlng
+      };
+
+      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	}
+    google.maps.event.addDomListener(window, 'load', initialize);
+
 $(function() {
     $.ajax({
         url: '{{ url_for("autocomplete") }}'

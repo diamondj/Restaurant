@@ -7,12 +7,12 @@
          <a href="{{ url_for('detail')}}">Details</a>
     </div>
     <ul>
-        <h1>All restaurants name with <font color:blue>{{name}}</font> </h1>
+        <h1>All restaurants named <font color:blue>{{name}}</font> </h1>
     </ul>
-     <div class = "row" >
-        <div class = "col-6" align = "right">
+     
+        <div class = "container" align = "right">
             <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
-              <caption><strong><font size = 5 color = #2377d7>Violations<strong></caption>
+              <caption><strong><font size = 5 color = #2377d7>Information<strong></caption>
               <tr bgcolor="#346795">
                 <th><font color = "#FEFEFE">Name</th>
                 <th><font color = "#FEFEFE">ID</th>
@@ -23,24 +23,85 @@
               </tr>
               {% for restaurant in data %}
                 <tr font-weight: bold>
-                    <td><font color = "#222277">{{restaurant.name}}</td>
-                    <td><font color = "#222277">{{restaurant.id}}</td>
-                    <td><font color = "#222277">{{restaurant.address}}</td>
-                    <td><font color = "#222277">{{restaurant.postal_code}}</td>
-                    <td><font color = "#222277">{{restaurant.phone_number}}</td>
-                    <td><a href="/inspections/{{restaurant.id}}">Check #{{restaurant.id}}</a></td>
+                    <td><font color = "#222277">{{restaurant[1]}}</td>
+                    <td><font color = "#222277">{{restaurant[0]}}</td>
+                    <td><font color = "#222277">{{restaurant[2]}}</td>
+                    <td><font color = "#222277">{{restaurant[3]}}</td>
+                    <td><font color = "#222277">{{restaurant[6]}}</td>
+                    <td><a href="/inspections/{{restaurant[0]}}">Check #{{restaurant[0]}}</a></td>
                 </tr>  
               {% endfor %}
             </table>
         </div>
-
-          <div class = "col-6" align = "left">
-           
-                {{SFmap.html}}
-                {{SFmap.js}}
-
+      <br><br>
+     <div class = "container" align = "center">   
+        <div id="map-canvas" style = "width:50%;height:50%" align = "left">   
         </div>
-    </div>
+      </div>
+
+    <script>
+
+
+    function initialize() {
+      var myLatlng = new Array();
+      var data = {{ data|tojson }};
+      for (var i = 0; i < data.length; i++){
+        myLatlng.push(new google.maps.LatLng(data[i][4],data[i][5]));
+      }
+      var mapOptions = {
+        zoom: 12,
+        center: new google.maps.LatLng(37.7833, -122.4167)
+      };
+
+      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+      var marker = new Array();
+      var color;
+      var contentString;
+      var info = new google.maps.InfoWindow();
+      for (i = 0; i<data.length; i++) {
+        marker.push(new google.maps.Marker({
+            position: myLatlng[i],
+            map: map,
+            title: 'Restaurant view'
+        }));
+        m = marker[i];
+        if (data[i][8] >= 90) {
+            color = '#369923';
+            m.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+          }
+        else if (data[i][8] > 85) {
+            color = '#B29942';
+            m.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+          }
+        else if (data[i][8] > 70) {
+            color = '#FE8432';
+            m.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+          }
+        else {
+            color = '#FF2222';
+            m.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+        }
+        contentString = '<div><h3><b>Info for '+data[i][1]+'</h3>'+
+                            '<p>Address:'+data[i][2]+'</p>'+
+                            '<p>Postal code:'+data[i][3]+'</p>'+
+                            '<font color='+color+'>'+
+                            '<p>Latest score:'+data[i][8]+'</p>'+
+                            '<p>Violations: '+data[i][9]+'</b></font></p></div>';
+            (function (info, m, contentString) {
+                google.maps.event.addListener(m, 'click', function() {
+                  info.close();
+                  info.setContent(contentString);
+                  info.open(map,m);
+                });
+            })(info, m, contentString);
+        
+      }
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
     {% endblock %}
  
 

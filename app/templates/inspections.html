@@ -7,45 +7,110 @@
          <a href="{{ url_for('detail')}}">Details</a>
     </div>
     <ul>
-        <h1>Information for inspections and violations of restaurant {{id}}: {{name}} </h1>
+        <h1>Information for restaurant {{restaurant.id}}: {{restaurant.name}} </h1>
     </ul>
+    <div class = "container" align = "center">
+      <div class = "col-6" id="map-canvas" align = "left" style = "width:600px;height:450px"></div>
 
+    </div>
+    <div class = "container"  align = "center">>
+          <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
+            <caption><strong><font size = 5 color = #2377d7>Inspections<strong></caption>
+            <tr bgcolor="#346795">
+              <th><font color = "#FEFEFE">Date</th>
+              <th><font color = "#FEFEFE">Score</th>
+              <th><font color = "#FEFEFE">Inspection Type</th>
+            </tr>
+            {% for insp in inspections %}
+              <tr>
 
+                  <td>{{insp.date.strftime("%m/%d/%Y")}}</td>
+                  <td>{{insp.score}}</td>
+                  <td>{{insp.insp_type}}</td>
+              </tr>  
+            {% endfor %}
+          </table>
+          <br><br><br>
+          
+      </div>
     <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
-      <caption><strong><font size = 5 color = #2377d7>Inspections<strong></caption>
-      <tr bgcolor="#346795">
-        <th><font color = "#FEFEFE">Date</th>
-        <th><font color = "#FEFEFE">Score</th>
-        <th><font color = "#FEFEFE">Inspection Type</th>
-      </tr>
-      {% for insp in inspections %}
-        <tr>
+            <caption><strong><font size = 5 color = #2377d7>Violations<strong><font></caption>
+            <tr bgcolor="#346795">
+              <th><font color = "#FEFEFE">Date</th>
+              <th><font color = "#FEFEFE"><font color = "#FEFEFE">Violation Code</th>
+              <th><font color = "#FEFEFE">Category</th>
+              <th><font color = "#FEFEFE">Description</th>
 
-            <td>{{insp.date.strftime("%m/%d/%Y")}}</td>
-            <td>{{insp.score}}</td>
-            <td>{{insp.insp_type}}</td>
-        </tr>  
-      {% endfor %}
-    </table>
-    <br><br><br>
-    <table border="1" align ="center" text-align = "center" style="border-collapse: collapse" cellpadding="5">
-      <caption><strong><font size = 5 color = #2377d7>Violations<strong><font></caption>
-      <tr bgcolor="#346795">
-        <th><font color = "#FEFEFE">Date</th>
-        <th><font color = "#FEFEFE"><font color = "#FEFEFE">Violation Code</th>
-        <th><font color = "#FEFEFE">Category</th>
-        <th><font color = "#FEFEFE">Description</th>
+            </tr>
+            {% for viol in violations %}
+              <tr>
+                  <td>{{viol.date.strftime("%m/%d/%Y")}}</td>
+                  <td>{{viol.typeID}}</td>
+                  <td>{{viol.risk_category}}</td>
+                  <td>{{viol.description}}</td>
+              </tr>  
+            {% endfor %}
+          </table>
 
-      </tr>
-      {% for viol in violations %}
-        <tr>
-            <td>{{viol.date.strftime("%m/%d/%Y")}}</td>
-            <td>{{viol.typeID}}</td>
-            <td>{{viol.risk_category}}</td>
-            <td>{{viol.description}}</td>
-        </tr>  
-      {% endfor %}
-    </table>
+
+   
+  <script>
+    function initialize() {
+      var myLatlng = new google.maps.LatLng({{restaurant.latitude}},{{restaurant.longitude}});
+      var mapOptions = {
+        zoom: 14,
+        center: myLatlng
+      };
+      data = {{results|tojson}};
+      console.log(data);
+      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+      var color;
+
+      
+
+      var marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          title: 'Restaurant view'
+      });
+      
+      if (data[1] >= 90) {
+            color = '#369923';
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+          }
+        else if (data[1] > 85) {
+            color = '#B29942';
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+          }
+        else if (data[1] > 70) {
+            color = '#FE8432';
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+          }
+        else {
+            color = '#FF2222';
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+        }
+
+
+      var contentString = '<h3><b>{{restaurant.name}}</h3><ul><p>Address:{{restaurant.address}}</p>'+
+                          '<p>Postal code:{{restaurant.postal_code}}</p>'+
+                          '<p>score: {{inspections.score}}</p>'+
+                          '<font color='+color+'>'+
+                          '<p>Latest score:'+data[1]+'</p>'+
+                          '<p>Violations: '+data[2]+'</b>'+
+                          '</ul>';
+
+
+      var infowindow = new google.maps.InfoWindow({content: contentString});
+
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map,marker);
+      });
+
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 
 
     {% endblock %}
