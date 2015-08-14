@@ -1,3 +1,3 @@
-# Website for check health score and violations of restaurants in San Francisco
+# Website for health score in SF restaurant
 
 Build by Python Flask, SQLite, HTML, CSS, and JavaScript.

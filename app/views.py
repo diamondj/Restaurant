@@ -13,11 +13,7 @@ def preprocess(s):
     s = s.strip()
     return string.capwords(s)
 
-
-GoogleMaps(app)
-SFgeo = (37.7833, -122.4167)
-
-
+# JSON API can search by id or name
 @app.route('/restaurant/<restaurant_id>/JSON', methods=['GET'])
 def restaurantIDJSON(restaurant_id):
     restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
@@ -39,6 +35,7 @@ def restaurantInspectionJSON(restaurant_id):
 def mainPage():
     return redirect(url_for('index'))
 
+#Main page
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     if request.method == "POST":
@@ -53,7 +50,7 @@ def index():
 
     return render_template('index.html')
 
-
+# Search restaurant by name, return only a list of results 
 @app.route('/restaurant/name/<name>', methods=['GET', 'POST'])
 def restaurant_name(name):
     
@@ -106,7 +103,7 @@ def restaurant_name(name):
         return  redirect(url_for('index'))
 
 
-    
+# Search restaurant by id, return only one result    
 @app.route('/restaurant/<restaurant_id>', methods=['GET', 'POST'])
 def restaurant(restaurant_id):
     restaurant = db.session.query(Restaurant).filter_by(id=restaurant_id).first()
@@ -134,6 +131,7 @@ def restaurant(restaurant_id):
     else:
         return  redirect(url_for('index'))
 
+#Help page
 @app.route('/details', methods = ['GET'])
 def detail():
     return render_template('explanation.html')
