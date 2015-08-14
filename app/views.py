@@ -2,13 +2,9 @@ from flask import render_template, flash, redirect, session, url_for, request, j
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 from app import app, db
-from .forms import LoginForm, EditForm
 from .models import Restaurant, Inspections, Violations
 from sqlalchemy import desc, func, and_, or_
 from sqlalchemy.orm import load_only
-
-from flask_googlemaps import GoogleMaps
-from flask_googlemaps import Map
 
 import string
 import json
@@ -86,7 +82,8 @@ def restaurant_name(name):
                                    Inspections.score.label('score')).\
                                    join(Inspections, Inspections.business_id==ins.c.id).\
                                    filter(Inspections.date==ins.c.date).\
-                                   filter(Inspections.score != None).subquery()                             
+                                   filter(Inspections.score != None).subquery()
+                                                                
     results = db.session.query(inspections.c.id.label('id'), 
                                inspections.c.name.label('name'),
                                inspections.c.addr.label('addr'),
